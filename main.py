@@ -4,47 +4,37 @@ set_appearance_mode("System")
 set_default_color_theme("blue")
 
 app = CTk()
-app.geometry("300x500")
+app.geometry("600x800")
 app.title("Number AI")
-app.resizable(0,0)
+app.resizable(0, 0)
 
 label = CTkLabel(app, text="Draw a number", font=("Arial", 18))
 label.pack()
 
-
-
-
-
-
-drown_pixels = []
-last_drowned = []
+# drown grid pixels
+drown_gp = []
 
 # canvas n to n
-n = 200
+n = 15 * 28
 
-# the grid k to k on the canvas:
-k = 10
+# the grid k to k (grid pixels) on the canvas:
+k = 15
+
 
 def draw(event):
-
     if (n > event.x >= 0) & (n > event.y >= 0):
 
-        print(drown_pixels)
+        print(drown_gp)
 
-        if not last_drowned:
-            drown_pixels.append([event.x, event.y])
-            last_drowned.append(event.x)
-            last_drowned.append(event.y)
+        alpha = n / k
 
-        else:
-            x1, y1 = last_drowned[0], last_drowned[1]
-            x2, y2 = event.x, event.y
+        x_ = event.x // alpha
+        y_ = event.y // alpha
 
-            drown_pixels.append([x2, y2])
-            last_drowned[0] = x2
-            last_drowned[1] = y2
+        if [x_, y_] not in drown_gp:
+            drown_gp.append([x_, y_])
 
-            canvas.create_line(x1, y1, x2, y2, fill='red')
+        canvas.create_rectangle(alpha * x_, alpha * y_, alpha * (x_ + 1), alpha * (y_ + 1), fill="black")
 
 
 canvas = CTkCanvas(bg="white", width=n, height=n)
@@ -52,7 +42,6 @@ canvas.pack(anchor="center")
 
 canvas.bind('<ButtonPress-1>', draw)
 canvas.bind('<B1-Motion>', draw)
-canvas.bind('<ButtonRelease-1>', lambda event: last_drowned.clear())
 
 compute_btn = CTkButton(master=app, text="compute")
 compute_btn.pack()
