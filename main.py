@@ -15,10 +15,10 @@ label.pack()
 drown_gp = []
 
 # canvas n to n
-n = 15 * 28
+n = 25 * 18
 
 # the grid k to k (grid pixels) on the canvas:
-k = 15
+k = 25
 
 
 def draw(event):
@@ -42,6 +42,7 @@ canvas.pack(anchor="center")
 
 canvas.bind('<ButtonPress-1>', draw)
 canvas.bind('<B1-Motion>', draw)
+
 
 compute_btn = CTkButton(master=app, text="compute")
 compute_btn.pack()
