@@ -1,5 +1,8 @@
+import sqlite3
+
 from customtkinter import *
 import sqlite3 as sl
+
 
 def draw(event):
     if (n > event.x >= 0) & (n > event.y >= 0):
@@ -17,30 +20,34 @@ def draw(event):
         canvas.create_rectangle(alpha * x_, alpha * y_, alpha * (x_ + 1), alpha * (y_ + 1), fill="black")
 
 
-def init(layers_, weights_):
+con = sqlite3.connect('database.db')
 
-    init_layer(324, layers_)
-    init_layer(100, layers_)
-    init_layer(10, layers_)
+cursor = con.cursor()
+
+# weights = (layer; weights_layer)
+# weights_layer = (j; weights_i)
+# weights_i is just list of all weights that we got for that layer and j
+
+with con:
+    cursor.execute("SELECT * FROM weights")
+
+    # (id, layer, i, j, value)
+    db_weights = cursor.fetchall()
+
+    weights = []
+    weights_layer = []
+
+    count = 1
+
+    for item in db_weights:
+        value = item[4]
+
+        weights_layer.append(value)
 
 
-def init_layer(n_, layers_):
-
-    layer = []
-    for i in range(n_):
-        layer.append(0)
-
-    layers_.append(layer)
 
 
-layers = []
-W = []
-
-init(layers)
-
-
-
-
+print(weights)
 
 set_appearance_mode("System")
 set_default_color_theme("blue")
@@ -67,15 +74,5 @@ canvas.pack(anchor="center")
 
 canvas.bind('<ButtonPress-1>', draw)
 canvas.bind('<B1-Motion>', draw)
-
-
-
-
-
-print(layers)
-
-
-
-
 
 app.mainloop()
